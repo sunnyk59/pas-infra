@@ -1,14 +1,21 @@
-module "vpc" {
-  source  = "./vpc"
+provider "aws" {
+  region = "ap-southeast-2"
 }
 
-module "eks" {
-  source          = "./eks-cluster"
-  cluster_name    = var.eks_cluster_name
-  node_instance_type = var.node_instance_type
+terraform {
+  required_version = ">= 1.10.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.41.0" 
+    }
+  }
+  backend "s3" {
+    bucket         = "webpas-terraform-state"
+    key            = "terraform/pas-infra/terraform.tfstate"  
+    region         = "ap-southeast-2"
+    dynamodb_table = "webpas-terraform-state-lock"
+    encrypt        = true
+  }
 }
-
-module "rds" {
-  source  = "./rds"
-}
-
+ 
