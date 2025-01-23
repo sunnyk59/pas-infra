@@ -34,8 +34,13 @@ jobs:
     - name: Terraform Init
       run: terraform init
  
-    - name: Trigger the Frontend Deployment
-      run: |
-        curl -X POST https://api.github.com/repos/sunnyk59/pas-frontend/dispatches \
+  trigger-frontend-backend:
+    needs: terraform
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Trigger Frontend Workflow
+        run: |
+          curl -X POST \
             -H "Authorization: token ${{ secrets.DEPLOY_TOKEN }}" \
-            -d '{"event_type": "deploy"}' || echo "Failed to trigger frontend deployment"
+            -d '{"event_type": "deploy"}' \
+            https://api.github.com/repos/sunnyk59/pas-frontend/dispatches
