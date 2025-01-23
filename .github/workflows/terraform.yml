@@ -34,7 +34,7 @@ jobs:
     - name: Terraform Init
       run: terraform init
  
-    - name: Trigger Frontend Deployment
+    - name: Trigger the Frontend Deployment
       run: |
         curl -X POST https://api.github.com/repos/sunnyk59/pas-frontend/dispatches \
             -H "Authorization: token ${{ secrets.DEPLOY_TOKEN }}" \
