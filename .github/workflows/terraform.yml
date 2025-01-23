@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write      
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -26,7 +29,7 @@ jobs:
       with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
+          aws-region: ap-southeast-2
 
     - name: Terraform Init
       run: terraform init
@@ -35,4 +38,4 @@ jobs:
       run: |
         curl -X POST https://api.github.com/repos/sunnyk59/pas-frontend/dispatches \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -d '{"event_type": "deploy"}'
+          -d '{"event_type": "deploy"}' || echo "Failed to trigger frontend deployment"
